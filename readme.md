@@ -1,23 +1,23 @@
 BUILD:
-docker build -t spamassassin .
+docker build --build-arg 3.4.6-1build3 -t zetanova/spamassassin:3.4.6 -t zetanova/spamassassin  .
 
 INIT:
-docker run -it -v c:/temp/spamassassin:/var/lib/spamassassin --entrypoint sa-update spamassassin -v
+docker volume create spamassassin
+docker run -it --rm \
+	-v spamassassin:/var/lib/spamassassin \
+	zetanova/spamassassin \
+	sa-update -v
 
-RUN:
-docker run -d -p 783:783 -v c:/temp/spamassassin:/var/lib/spamassassin spamassassin -A 0.0.0.0
+TEST:
+docker run --rm -p 783:783 -v spamassassin:/var/lib/spamassassin zetanova/spamassassin
 
-
-
-docker pull registry.cwtech.at/zetanova/docker-spamassassin
-
-
-docker run -it -v /srv/spamassassin:/var/lib/spamassassin --entrypoint sa-update \
-	registry.cwtech.at/zetanova/docker-spamassassin -v
-
-	
+RUN
 docker run -it -d --name spamassassin \
 	--restart always \
-	-p 783:783 -v /srv/spamassassin:/var/lib/spamassassin \
-	registry.cwtech.at/zetanova/docker-spamassassin -A 0.0.0.0/0
+	-p 783:783 -v spamassassin:/var/lib/spamassassin \
+	zetanova/docker-spamassassin
 
+
+UPDATE POLICY
+1) docker exec --user root spamassassin sa-update -v
+1) docker exec spamassassin sa-update -v --nogpg
