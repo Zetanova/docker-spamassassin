@@ -1,17 +1,16 @@
-FROM alpine:3.8
+FROM ubuntu:jammy
 
-ENV SPAMASSASSIN_VERSION=3.4.1-r8
+ENV SPAMASSASSIN_VERSION=3.4.6-1build3
 
-RUN apk add --update spamassassin=${SPAMASSASSIN_VERSION} && \
-	rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /var/cache/distfiles/*
-
-#COPY rootfs/ /
+RUN apt-get update && apt-get install -y spamassassin=${SPAMASSASSIN_VERSION} \
+	&& rm -rf /var/lib/apt/lists/*
 
 #RUN sa-update
+
+USER spamassassin
 
 VOLUME /var/lib/spamassassin
 
 EXPOSE 783
 
 ENTRYPOINT ["spamd", "-i"]
-
