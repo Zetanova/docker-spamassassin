@@ -10,13 +10,14 @@ docker run -it --rm \
 	sa-update -v
 
 ## TEST
-docker run --rm -p 783:783 -v spamassassin:/var/lib/spamassassin zetanova/spamassassin --allowed-ips=0.0.0.0/0
+docker run --rm -p 783:783 -v spamassassin:/var/lib/spamassassin zetanova/spamassassin
 
 ## RUN
 docker run -it -d --name spamassassin \
 	--restart unless-stopped \
-	-p 783:783 -v spamassassin:/var/lib/spamassassin \
-	zetanova/spamassassin --allowed-ips=0.0.0.0/0
+	-p 783:783 \
+	-v spamassassin:/home/spamd/.spamassassin \
+	zetanova/spamassassin
 
 
 ## UPDATE
