@@ -1,23 +1,27 @@
-BUILD:
-docker build --build-arg 3.4.6-1build3 -t zetanova/spamassassin:3.4.6 -t zetanova/spamassassin  .
+## BUILD
+docker build --build-arg 4.0.0-8ubuntu5 -t zetanova/spamassassin:4.0.0 -t zetanova/spamassassin  .
 
-INIT:
+## INIT
 docker volume create spamassassin
 docker run -it --rm \
 	-v spamassassin:/var/lib/spamassassin \
+	--user root \
 	zetanova/spamassassin \
 	sa-update -v
 
-TEST:
-docker run --rm -p 783:783 -v spamassassin:/var/lib/spamassassin zetanova/spamassassin
+## TEST
+docker run --rm -p 783:783 -v spamassassin:/var/lib/spamassassin zetanova/spamassassin --allowed-ips=0.0.0.0/0
 
-RUN
+## RUN
 docker run -it -d --name spamassassin \
-	--restart always \
+	--restart unless-stopped \
 	-p 783:783 -v spamassassin:/var/lib/spamassassin \
-	zetanova/docker-spamassassin
+	zetanova/spamassassin --allowed-ips=0.0.0.0/0
 
 
-UPDATE POLICY
-1) docker exec --user root spamassassin sa-update -v
-1) docker exec spamassassin sa-update -v --nogpg
+## UPDATE
+docker exec --user root spamassassin sa-update -v
+or) docker exec spamassassin sa-update -v --nogpg
+
+## RELOAD
+docker kill --signal=HUP spamassassin
