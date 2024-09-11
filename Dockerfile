@@ -4,7 +4,9 @@ ARG SPAMASSASSIN_VERSION=4.0.0-8ubuntu5
 
 ENV TZ="Europe/Vienna"
 
-RUN apt-get update && apt-get install -yq spamassassin=${SPAMASSASSIN_VERSION} \
+RUN apt-get update && apt-get install -yq \
+    spamassassin=${SPAMASSASSIN_VERSION} \
+    sa-compile=${SPAMASSASSIN_VERSION} \
 	&& rm -rf /var/lib/apt/lists/*
 
 #RUN sa-update

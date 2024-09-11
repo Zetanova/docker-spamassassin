@@ -1,5 +1,5 @@
 ## BUILD
-docker build --build-arg 4.0.0-8ubuntu5 -t zetanova/spamassassin:4.0.0 -t zetanova/spamassassin  .
+docker build --build-arg 4.0.0* -t zetanova/spamassassin:4.0.0 -t zetanova/spamassassin  .
 
 ## INIT
 docker volume create spamassassin
